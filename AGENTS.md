@@ -15,7 +15,8 @@ latência mínima, volume 0–200% e tela cheia, sem OBS.
 ## Stack
 
 TypeScript puro + DOM (sem framework) · Vite · `getUserMedia` · Web Audio (`GainNode`) ·
-`localStorage` · GitHub Pages via Actions · Vitest (regras puras) · Playwright (E2E, mídia falsa).
+`localStorage` · GitHub Pages via Actions · Vitest (regras puras) · Playwright (E2E, mídia falsa,
+Chromium + Firefox na CI). Navegador recomendado: Firefox (Chrome recebe MJPEG — ver ADR).
 
 ## Comandos
 

@@ -53,7 +53,8 @@ falhando bloqueiam o deploy** no GitHub Pages.
 | Persistência | `localStorage` (com try/catch) | 4 valores (vídeo, áudio, volume, mudo) |
 | Distribuição | GitHub Pages via GitHub Actions, desde a Fase 0 | Link fixo HTTPS, custo zero, sem servidor; vídeo nunca sai do PC |
 | Testes unitários | Vitest | Integrado ao Vite, zero config; regras puras em ms |
-| Testes E2E | Playwright (Chromium, `--use-fake-device-for-media-stream` + `--use-fake-ui-for-media-stream`) | Jornada completa sem placa real, inclusive na CI |
+| Testes E2E | Playwright — Chromium (`--use-fake-device-for-media-stream`) e Firefox (`media.navigator.streams.fake`) | Jornada completa sem placa real, inclusive na CI |
+| Navegador alvo | **Firefox** recomendado; Chrome/Edge funcionam com aviso | Chrome no Windows recebe MJPEG da placa (ver Decisões posteriores) |
 
 ---
 
@@ -86,11 +87,12 @@ src/
   sourceRules.ts   # PURO: pareia áudio ao vídeo (groupId, depois label) + constraints de áudio bruto
   source.ts        # I/O: enumerar, abrir streams, aguardar devicechange
   audio.ts         # grafo Web Audio (MediaStreamSource → GainNode → destination)
-  prefs.ts         # leitura/escrita em localStorage, tolerante a falha
   controls.ts      # barra de controles (DOM)
   shortcuts.ts     # PURO: tecla → ação
   autoHide.ts      # fade da barra e do cursor por inatividade
   toast.ts         # aviso rápido
+  browser.ts       # PURO: detecta Chromium (aviso de qualidade)
+  prefs.ts         # localStorage tolerante a falha
 tests/
   unit/            # Vitest — regras puras
   e2e/             # Playwright — jornada crítica
@@ -117,8 +119,28 @@ Contratos-chave:
 
 | Fitness Function | Característica protegida | Como checar |
 |---|---|---|
-| `captureMode.ts`, `volume.ts`, `sourceRules.ts` e `shortcuts.ts` não acessam `window`, `document` nem `navigator` | regras puras testáveis | grep + testes unitários rodam em Node |
+| `captureMode.ts`, `volume.ts`, `sourceRules.ts`, `shortcuts.ts` e `browser.ts` não acessam `window`, `document` nem `navigator` | regras puras testáveis | grep + testes unitários rodam em Node |
 | Nenhuma dependência de runtime (`dependencies` vazio no `package.json`) | app sem peso extra | inspeção do `package.json` |
 | Nenhum uso de `<canvas>`, `requestVideoFrameCallback` ou reencode em `src/` | latência baixa | grep |
 | Captura de áudio sempre com os 3 filtros de voz desligados | áudio de jogo íntegro | teste unitário/grep das constraints |
 | Testes passam antes de todo deploy | nada quebrado em produção | job de CI `test` precede `deploy` |
+
+---
+
+## Decisões posteriores
+
+### 2026-09-24 — Firefox como navegador recomendado
+
+**O que mudou:** o capview recomenda o Firefox; no Chrome/Edge exibe um aviso dispensável.
+**Por quê:** com a UGREEN CM630 (1080p60, MJPEG e YUY2), o Chrome no Windows recebe **MJPEG**
+(comprimido pela placa) — qualidade visivelmente pior. Evidência: no OBS, formato MJPEG ficou
+igual ao Chrome e YUY2 ficou "muito bom"; o Firefox, com o mesmo site, ficou bom. A Media
+Capture API não permite ao site escolher o formato de pixel.
+**Alternativas descartadas:**
+- Chrome com `--disable-features=MediaFoundationVideoCapture` — exige atalho especial por usuário (não testado).
+- Programa local (ffmpeg/nativo) capturando YUY2 e entregando ao navegador — reencode, latência e
+  complexidade; contraria o "só navegador".
+- App nativo/Electron — Electron é Chromium (mesmo problema); nativo abandona o navegador.
+**Impacto:** E2E roda em Chromium e Firefox na CI. Novo módulo puro `browser.ts` e `prefs.ts`
+(base da persistência da Fase 2).
+**Como reverter:** remover `#browser-hint` e o projeto `firefox` do Playwright.

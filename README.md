@@ -4,7 +4,8 @@ Veja e ouça o console pela placa de captura direto no navegador — sem OBS, co
 mínima, volume de 0 a 200% e tela cheia. O vídeo é processado só no seu computador; o site
 apenas entrega a página.
 
-**Usar:** https://caue-r.github.io/Capview/
+**Usar:** https://caue-r.github.io/Capview/ — de preferência no **Firefox**. No Chrome/Edge
+algumas placas (ex.: UGREEN CM630) entregam vídeo comprimido (MJPEG) e a imagem fica pior.
 
 A placa precisa aparecer no Windows como câmera/microfone (UVC). Teste rápido: se ela aparece
 em https://webcamtests.com, funciona no capview.

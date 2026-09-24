@@ -26,6 +26,8 @@ por JS, canvas ou encoder.
 | `shortcuts.ts` | puro | tecla → ação (`↑`/`↓`/`M`/`F`; ignora modificadores e repetição de M/F) |
 | `autoHide.ts` | DOM | `data-idle` em `#app` após 2,5 s sem mover o mouse; fade via CSS; mantém visível com ponteiro na barra ou seletor em foco |
 | `toast.ts` | DOM | aviso rápido de 1 s em `#toast` |
+| `browser.ts` | puro | `isChromium(userAgent)` para o aviso de qualidade |
+| `prefs.ts` | I/O | `localStorage` com prefixo `capview.`, tolerante a falha |
 | `controls.ts` | DOM | barra de controles; expõe `data-gain` e `data-audio` em `#volume-value` |
 | `main.ts` | composição | estado da sessão, troca de dispositivos (descarta aberturas obsoletas), tela cheia, despacho de atalhos (ignorados com seletor em foco) |
 
@@ -33,6 +35,9 @@ Dependências: `main` → todos; `source` → `captureMode`, `sourceRules`; `con
 `sourceRules`/`volume`. Módulos puros não importam nada de I/O.
 
 ## Comportamentos da plataforma observados
+
+- **Chrome no Windows recebe MJPEG** da CM630 mesmo com YUY2 disponível; Firefox recebe o
+  formato sem compressão. Página mostra `#browser-hint` no Chromium (dispensável, lembrado).
 
 - Chrome libera o `AudioContext` sem gesto enquanto a página captura câmera/microfone. O
   botão "Clique para ativar o som" fica como rede de segurança (outros navegadores/políticas).
@@ -44,7 +49,9 @@ Dependências: `main` → todos; `source` → `captureMode`, `sourceRules`; `con
 - `tests/unit/` — regras puras (Vitest).
 - `tests/e2e/player.spec.ts` — vídeo toca, som sem clique, volume/mudo alteram o ganho real,
   tela cheia.
-- `tests/e2e/controls.spec.ts` — auto-ocultar, atalhos, aviso rápido. Chromium com mídia falsa e `--autoplay-policy=user-gesture-required`.
+- `tests/e2e/controls.spec.ts` — auto-ocultar, atalhos, aviso rápido.
+- `tests/e2e/browserHint.spec.ts` — aviso no Chromium, ausente no Firefox.
+- Projetos: `chromium` sempre; `firefox` na CI ou com `PW_FIREFOX=1`. Chromium com mídia falsa e `--autoplay-policy=user-gesture-required`.
 
 ## Fitness functions
 

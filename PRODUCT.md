@@ -68,7 +68,8 @@ Qualidade de vídeo: automática (melhor modo que a placa oferecer).
 
 ## Restrições conhecidas
 
-- Nenhuma restrição de navegador, monitor, linguagem ou hardware declarada.
+- Navegador recomendado: **Firefox**. No Chrome/Edge a CM630 entrega MJPEG (comprimido) e a
+  imagem fica pior; a página avisa. Ver `ADR.md` (2026-09-24).
 - Premissa técnica a validar: a UGREEN CM630 é exposta pelo Windows como dispositivo UVC
   (webcam + microfone) e aparece no `navigator.mediaDevices.enumerateDevices()`.
 
