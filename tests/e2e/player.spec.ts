@@ -1,6 +1,6 @@
 import { type Page, expect, test } from '@playwright/test';
 
-// Jornada crítica da Fase 1 com câmera/microfone falsos do Chromium.
+// Jornada crítica da Fase 1 com câmera/microfone falsos (Chromium e Firefox).
 
 async function videoIsPlaying(page: Page): Promise<boolean> {
   return page.locator('#screen').evaluate(
@@ -23,17 +23,30 @@ test.beforeEach(async ({ page }) => {
 
 test('mostra o vídeo da fonte com o modo de captura', async ({ page }) => {
   await expect.poll(() => videoIsPlaying(page)).toBe(true);
-  await expect(page.locator('#mode')).toHaveText(/^\d+×\d+ @ \d+ fps$/);
+  // Nem todo navegador informa o fps nas settings do dispositivo falso.
+  await expect(page.locator('#mode')).toHaveText(/^\d+×\d+( @ \d+ fps)?$/);
   await expect(page.locator('#status')).toBeHidden();
   await expect(page.locator('#screen')).toHaveJSProperty('muted', true);
 });
 
 // Com captura ativa o Chrome libera áudio sem gesto, mesmo com a política de autoplay estrita.
-test('som toca sem pedir clique enquanto a placa está capturando', async ({ page }) => {
+test('som toca sem pedir clique no Chromium enquanto a placa está capturando', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium', 'exceção de autoplay específica do Chromium');
   await ensureAudioSelected(page);
   await expect.poll(() => videoIsPlaying(page)).toBe(true);
   await expect(page.getByRole('button', { name: 'Clique para ativar o som' })).toBeHidden();
   await expect(page.locator('#volume-value')).toHaveAttribute('data-audio', 'running');
+});
+
+test('som fica ativo, no máximo depois do botão de ativar', async ({ page }) => {
+  await ensureAudioSelected(page);
+  await expect.poll(() => videoIsPlaying(page)).toBe(true);
+  const audioState = page.locator('#volume-value');
+  await expect(audioState).not.toHaveAttribute('data-audio', 'off');
+  const unlock = page.getByRole('button', { name: 'Clique para ativar o som' });
+  if (await unlock.isVisible()) await unlock.click();
+  await expect(unlock).toBeHidden();
+  await expect(audioState).toHaveAttribute('data-audio', 'running');
 });
 
 test('volume de 0 a 200% e mudo alteram o ganho', async ({ page }) => {

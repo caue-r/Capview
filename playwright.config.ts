@@ -1,6 +1,21 @@
-import { defineConfig, devices } from '@playwright/test';
+import { type Project, defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
+
+// Firefox é o navegador recomendado (ADR 2026-09-24). Roda na CI; localmente só com
+// PW_FIREFOX=1, pois exige o Firefox do Playwright baixado.
+const firefox: Project = {
+  name: 'firefox',
+  use: {
+    ...devices['Desktop Firefox'],
+    launchOptions: {
+      firefoxUserPrefs: {
+        'media.navigator.streams.fake': true,
+        'media.navigator.permission.disabled': true,
+      },
+    },
+  },
+};
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -30,6 +45,7 @@ export default defineConfig({
         permissions: ['camera', 'microphone'],
       },
     },
+    ...(process.env.CI || process.env.PW_FIREFOX ? [firefox] : []),
   ],
   webServer: {
     command: `npm run build && npx vite preview --port ${PORT} --strictPort`,
