@@ -141,6 +141,8 @@ const resumeAudio = () => {
   if (audio.needsGesture) void audio.resume();
 };
 document.addEventListener('pointerdown', resumeAudio);
+// Firefox só libera o AudioContext em alguns tipos de evento; click é aceito em todos.
+document.addEventListener('click', resumeAudio);
 document.addEventListener('keydown', resumeAudio);
 document.addEventListener('keydown', onShortcut);
 autoHide(document.getElementById('app') as HTMLElement, document.getElementById('controls') as HTMLElement);

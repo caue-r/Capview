@@ -45,8 +45,9 @@ test('som fica ativo, no máximo depois do botão de ativar', async ({ page }) =
   await expect(audioState).not.toHaveAttribute('data-audio', 'off');
   const unlock = page.getByRole('button', { name: 'Clique para ativar o som' });
   if (await unlock.isVisible()) await unlock.click();
-  await expect(unlock).toBeHidden();
+  // data-audio primeiro: se falhar, a mensagem mostra o estado real do AudioContext.
   await expect(audioState).toHaveAttribute('data-audio', 'running');
+  await expect(unlock).toBeHidden();
 });
 
 test('volume de 0 a 200% e mudo alteram o ganho', async ({ page }) => {
