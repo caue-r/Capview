@@ -44,6 +44,14 @@ Dependências: `main` → todos; `source` → `captureMode`, `sourceRules`; `con
 - Abrir o vídeo tenta cada modo com `resizeMode: 'none'`; `OverconstrainedError` passa ao
   próximo. Sem nenhum aceito, usa constraints `ideal` (o navegador escolhe o mais próximo).
 
+## Visual
+
+- Tokens de cor, raio e easing em `:root` de `src/style.css` (fonte canônica; sem `DESIGN.md`).
+- Paleta monocromática: preto puro no vídeo, `--bone` (#e7e6e5, do favicon) como único destaque.
+- Doca flutuante centralizada; seletores de fonte e sinal num `popover` nativo.
+- Fonte Instrument Sans via Google Fonts (única requisição externa além do Pages; cai para
+  `system-ui` offline). Favicon em `public/favicon.svg`, reusado nas telas de estado.
+
 ## Testes
 
 - `tests/unit/` — regras puras (Vitest).
