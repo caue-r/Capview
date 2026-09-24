@@ -8,7 +8,18 @@
   </head>
   <body>
     <main id="app">
-      <h1>capview</h1>
+      <video id="screen" autoplay muted playsinline></video>
+      <p id="status" role="status" hidden></p>
+      <button id="unlock" type="button" hidden>Clique para ativar o som</button>
+      <div id="controls" class="controls">
+        <button id="mute" type="button" aria-label="Mudo" aria-pressed="false" title="Mudo">🔊</button>
+        <input id="volume" type="range" min="0" max="200" step="5" value="100" aria-label="Volume" />
+        <output id="volume-value" for="volume">100%</output>
+        <label>Vídeo <select id="video-device"></select></label>
+        <label>Áudio <select id="audio-device"></select></label>
+        <span id="mode" class="mode"></span>
+        <button id="fullscreen" type="button">Tela cheia</button>
+      </div>
     </main>
     <script type="module" src="./src/main.ts"></script>
   </body>
