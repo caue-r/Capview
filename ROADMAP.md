@@ -17,18 +17,18 @@
 **Objetivo:** esqueleto vazio publicado e com gate de teste funcionando.
 
 **Critério de conclusão:**
-> Eu abro `https://caue-r.github.io/<repo>/` e vejo a página "capview"; um push na `main`
+> Eu abro `https://caue-r.github.io/Capview/` e vejo a página "capview"; um push na `main`
 > com teste falhando não publica.
 
 **Tarefas:**
-1. [AFK] Scaffold Vite + TypeScript (sem framework); `dependencies` vazio.
-2. [AFK] Vitest com 1 teste trivial; Playwright (Chromium, flags de mídia falsa) com 1 teste
+1. [x] [AFK] Scaffold Vite + TypeScript (sem framework); `dependencies` vazio.
+2. [x] [AFK] Vitest com 1 teste trivial; Playwright (Chromium, flags de mídia falsa) com 1 teste
    que abre a página.
-3. [AFK] GitHub Actions: `test` (unit + e2e) → `build` → `deploy` Pages; `base` do Vite
-   ajustado ao nome do repositório.
-4. [AFK] `AGENTS.md` (+ `CLAUDE.md` apontando para ele) e README operacional.
-5. [HITL] Ativar Pages: Settings → Pages → Source: GitHub Actions. Decidir renomear repo
-   para `capview` (opcional).
+3. [x] [AFK] GitHub Actions: `test` (unit + e2e) → `build` → `deploy` Pages; `base` do Vite
+   relativo (`./`), independente do nome do repo.
+4. [x] [AFK] `AGENTS.md` (+ `CLAUDE.md` apontando para ele) e README operacional.
+5. [ ] [HITL] Ativar Pages: Settings → Pages → Source: GitHub Actions. [x] Repo renomeado
+   para `Capview`.
 
 **Dependência:** nenhuma
 **Gate de arquitetura:** [ ]
