@@ -87,7 +87,10 @@ src/
   source.ts        # I/O: enumerar, abrir streams, aguardar devicechange
   audio.ts         # grafo Web Audio (MediaStreamSource → GainNode → destination)
   prefs.ts         # leitura/escrita em localStorage, tolerante a falha
-  controls.ts      # barra auto-ocultável, atalhos, toast
+  controls.ts      # barra de controles (DOM)
+  shortcuts.ts     # PURO: tecla → ação
+  autoHide.ts      # fade da barra e do cursor por inatividade
+  toast.ts         # aviso rápido
 tests/
   unit/            # Vitest — regras puras
   e2e/             # Playwright — jornada crítica
@@ -114,7 +117,7 @@ Contratos-chave:
 
 | Fitness Function | Característica protegida | Como checar |
 |---|---|---|
-| `captureMode.ts`, `volume.ts` e `sourceRules.ts` não acessam `window`, `document` nem `navigator` | regras puras testáveis | grep + testes unitários rodam em Node |
+| `captureMode.ts`, `volume.ts`, `sourceRules.ts` e `shortcuts.ts` não acessam `window`, `document` nem `navigator` | regras puras testáveis | grep + testes unitários rodam em Node |
 | Nenhuma dependência de runtime (`dependencies` vazio no `package.json`) | app sem peso extra | inspeção do `package.json` |
 | Nenhum uso de `<canvas>`, `requestVideoFrameCallback` ou reencode em `src/` | latência baixa | grep |
 | Captura de áudio sempre com os 3 filtros de voz desligados | áudio de jogo íntegro | teste unitário/grep das constraints |

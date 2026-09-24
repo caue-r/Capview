@@ -54,10 +54,10 @@
    jornada funcionar com webcam + placa conectadas.
 6. [x] [AFK] E2E: com dispositivo falso, vídeo reproduz e volume/mudo alteram o ganho.
 7. [x] [AFK] Criar `ARCHITECTURE.md`.
-8. [ ] [HITL] Teste real com a UGREEN CM630: modo obtido, latência percebida, sincronia de áudio.
+8. [x] [HITL] Teste real com a UGREEN CM630: modo obtido, latência percebida, sincronia de áudio.
 
 **Dependência:** Fase 0
-**Gate de arquitetura:** [ ]
+**Gate de arquitetura:** [x] (2026-09-24)
 
 ---
 
@@ -86,13 +86,14 @@
 > `↑`/`↓`/`M`/`F` funcionam e mostram um aviso rápido.
 
 **Tarefas:**
-1. [AFK] Auto-ocultar barra e cursor (não oculta com ponteiro sobre a barra/seletor aberto).
-2. [AFK] Atalhos `↑`/`↓` (±5%), `M`, `F`.
-3. [AFK] Toast (~1 s) para volume e mudo.
-4. [AFK] E2E dos atalhos e do auto-ocultar.
+1. [x] [AFK] Auto-ocultar barra e cursor com fade (não oculta com ponteiro sobre a barra/seletor em foco).
+2. [x] [AFK] Atalhos `↑`/`↓` (±5%), `M`, `F`.
+3. [x] [AFK] Toast (~1 s) para volume e mudo.
+4. [x] [AFK] E2E dos atalhos e do auto-ocultar.
 5. [HITL] Sessão de jogo real completa (critério de sucesso do `PRODUCT.md`).
 
-**Dependência:** Fase 2
+**Dependência:** Fase 1 (antecipada antes da Fase 2 a pedido do usuário em 2026-09-24;
+não depende de persistência)
 **Gate de arquitetura:** [ ]
 
 ---

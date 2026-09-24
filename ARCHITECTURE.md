@@ -1,7 +1,7 @@
 # ARCHITECTURE — capview
 
 Snapshot do estado atual. Mudança estrutural atualiza este arquivo e o `ADR.md`.
-**Atualizado:** 2026-09-24 (Fase 1)
+**Atualizado:** 2026-09-24 (Fases 1 e 3)
 
 ## Fluxo
 
@@ -23,8 +23,11 @@ por JS, canvas ou encoder.
 | `sourceRules.ts` | puro | pareamento áudio↔vídeo (`groupId`, depois nome) e constraints de áudio bruto |
 | `source.ts` | I/O | listar dispositivos (pede permissão se necessário), abrir streams, mensagens de erro |
 | `audio.ts` | I/O | `AudioContext` + `GainNode` |
+| `shortcuts.ts` | puro | tecla → ação (`↑`/`↓`/`M`/`F`; ignora modificadores e repetição de M/F) |
+| `autoHide.ts` | DOM | `data-idle` em `#app` após 2,5 s sem mover o mouse; fade via CSS; mantém visível com ponteiro na barra ou seletor em foco |
+| `toast.ts` | DOM | aviso rápido de 1 s em `#toast` |
 | `controls.ts` | DOM | barra de controles; expõe `data-gain` e `data-audio` em `#volume-value` |
-| `main.ts` | composição | estado da sessão, troca de dispositivos (descarta aberturas obsoletas), tela cheia |
+| `main.ts` | composição | estado da sessão, troca de dispositivos (descarta aberturas obsoletas), tela cheia, despacho de atalhos (ignorados com seletor em foco) |
 
 Dependências: `main` → todos; `source` → `captureMode`, `sourceRules`; `controls` → tipos de
 `sourceRules`/`volume`. Módulos puros não importam nada de I/O.
@@ -40,7 +43,8 @@ Dependências: `main` → todos; `source` → `captureMode`, `sourceRules`; `con
 
 - `tests/unit/` — regras puras (Vitest).
 - `tests/e2e/player.spec.ts` — vídeo toca, som sem clique, volume/mudo alteram o ganho real,
-  tela cheia. Chromium com mídia falsa e `--autoplay-policy=user-gesture-required`.
+  tela cheia.
+- `tests/e2e/controls.spec.ts` — auto-ocultar, atalhos, aviso rápido. Chromium com mídia falsa e `--autoplay-policy=user-gesture-required`.
 
 ## Fitness functions
 
