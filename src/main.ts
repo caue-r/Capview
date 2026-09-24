@@ -1,8 +1,10 @@
 // Composição da página: liga fonte, áudio e controles.
 import { AudioOutput } from './audio';
 import { autoHide } from './autoHide';
+import { isChromium } from './browser';
 import { describeMode } from './captureMode';
 import { Controls } from './controls';
+import { readPref, writePref } from './prefs';
 import { shortcutFor } from './shortcuts';
 import { type Devices, describeMediaError, listDevices, openAudio, openVideo, stopStream } from './source';
 import { pairAudio } from './sourceRules';
@@ -144,6 +146,14 @@ document.addEventListener('keydown', onShortcut);
 autoHide(document.getElementById('app') as HTMLElement, document.getElementById('controls') as HTMLElement);
 audio.onStateChange(renderAudio);
 document.addEventListener('fullscreenchange', () => controls.renderFullscreen(!!document.fullscreenElement));
+
+const BROWSER_HINT_PREF = 'browserHintDismissed';
+const browserHint = document.getElementById('browser-hint') as HTMLElement;
+browserHint.hidden = !isChromium(navigator.userAgent) || readPref(BROWSER_HINT_PREF) === '1';
+document.getElementById('browser-hint-close')?.addEventListener('click', () => {
+  browserHint.hidden = true;
+  writePref(BROWSER_HINT_PREF, '1');
+});
 
 screen.muted = true;
 applyVolume(volume);

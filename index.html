@@ -12,6 +12,13 @@
       <p id="status" role="status" hidden></p>
       <button id="unlock" type="button" hidden>Clique para ativar o som</button>
       <div id="toast" class="toast" aria-live="polite"></div>
+      <div id="browser-hint" class="hint" role="note" hidden>
+        <p>
+          No Chrome/Edge algumas placas entregam vídeo comprimido. Se a imagem parecer com pouca
+          qualidade, abra o capview no <strong>Firefox</strong>.
+        </p>
+        <button id="browser-hint-close" type="button">Entendi</button>
+      </div>
       <div id="controls" class="controls">
         <button id="mute" type="button" aria-label="Mudo" aria-pressed="false" title="Mudo (M)">🔊</button>
         <input id="volume" type="range" min="0" max="200" step="5" value="100" aria-label="Volume" />

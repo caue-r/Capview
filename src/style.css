@@ -126,6 +126,36 @@ body {
   }
 }
 
+.hint {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 10px 12px;
+  background: var(--panel);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 8px;
+}
+
+.hint p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.hint button {
+  flex: none;
+  font: inherit;
+  color: var(--fg);
+  background: rgb(255 255 255 / 0.08);
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
 #volume {
   width: 140px;
   accent-color: var(--accent);
