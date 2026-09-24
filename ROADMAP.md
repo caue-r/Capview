@@ -27,11 +27,11 @@
 3. [x] [AFK] GitHub Actions: `test` (unit + e2e) → `build` → `deploy` Pages; `base` do Vite
    relativo (`./`), independente do nome do repo.
 4. [x] [AFK] `AGENTS.md` (+ `CLAUDE.md` apontando para ele) e README operacional.
-5. [ ] [HITL] Ativar Pages: Settings → Pages → Source: GitHub Actions. [x] Repo renomeado
+5. [x] [HITL] Ativar Pages: Settings → Pages → Source: GitHub Actions. [x] Repo renomeado
    para `Capview`.
 
 **Dependência:** nenhuma
-**Gate de arquitetura:** [ ]
+**Gate de arquitetura:** [x] (2026-09-24)
 
 ---
 
