@@ -3,7 +3,7 @@
 **Data:** 2026-09-24
 **Baseado em:** `PRODUCT.md` v1.0 + `CONTEXT.md`
 **Perfil:** Lean (este ADR acumula as decisões de stack e a estrutura planejada; não há SDD
-separado. `ARCHITECTURE.md` nasce na Fase 1, quando houver código para descrever.)
+separado. Estado atual do código: `ARCHITECTURE.md`.)
 
 ---
 
@@ -83,7 +83,8 @@ src/
   main.ts          # composição: liga módulos ao DOM
   captureMode.ts   # PURO: escolhe CaptureMode (1080p60 → fallback maior FPS, maior resolução)
   volume.ts        # PURO: clamp 0–200%, passos de 5%, mudo independente do nível
-  source.ts        # PURO: pareia áudio ao vídeo por label  | + I/O: enumerar, abrir stream, aguardar devicechange
+  sourceRules.ts   # PURO: pareia áudio ao vídeo (groupId, depois label) + constraints de áudio bruto
+  source.ts        # I/O: enumerar, abrir streams, aguardar devicechange
   audio.ts         # grafo Web Audio (MediaStreamSource → GainNode → destination)
   prefs.ts         # leitura/escrita em localStorage, tolerante a falha
   controls.ts      # barra auto-ocultável, atalhos, toast
@@ -100,8 +101,9 @@ Contratos-chave:
 
 ## Restrições da plataforma (conhecidas)
 
-- **Autoplay:** o navegador só libera `AudioContext` e tela cheia após um gesto do usuário.
-  Na primeira interação da sessão pode ser necessário um clique ("Clique para ativar o som").
+- **Autoplay:** tela cheia exige gesto. O `AudioContext` também, **exceto** no Chrome enquanto
+  a página captura câmera/microfone (confirmado na Fase 1) — nesse caso o som toca sem clique.
+  "Clique para ativar o som" fica como rede de segurança.
 - **Permissão:** o primeiro acesso pede permissão de câmera/microfone; o navegador lembra
   por origem (`localhost` e o domínio do Pages são origens distintas).
 - `label` dos dispositivos só vem preenchido após permissão concedida.
@@ -112,7 +114,7 @@ Contratos-chave:
 
 | Fitness Function | Característica protegida | Como checar |
 |---|---|---|
-| `captureMode.ts`, `volume.ts` e o pareamento em `source.ts` não acessam `window`, `document` nem `navigator` | regras puras testáveis | grep + testes unitários rodam em Node |
+| `captureMode.ts`, `volume.ts` e `sourceRules.ts` não acessam `window`, `document` nem `navigator` | regras puras testáveis | grep + testes unitários rodam em Node |
 | Nenhuma dependência de runtime (`dependencies` vazio no `package.json`) | app sem peso extra | inspeção do `package.json` |
 | Nenhum uso de `<canvas>`, `requestVideoFrameCallback` ou reencode em `src/` | latência baixa | grep |
 | Captura de áudio sempre com os 3 filtros de voz desligados | áudio de jogo íntegro | teste unitário/grep das constraints |

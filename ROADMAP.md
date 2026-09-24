@@ -45,14 +45,16 @@
 > nem dessincronia.
 
 **Tarefas:**
-1. [AFK] `captureMode.ts` (1080p60 + fallback) com testes unitários.
-2. [AFK] `source.ts`: pareamento por label (testado) + abertura do stream com áudio bruto.
-3. [AFK] `audio.ts` + `volume.ts`: `<video>` mudo, áudio via `GainNode`; slider e mudo;
-   gesto inicial "Clique para ativar o som" quando necessário.
-4. [AFK] Botão de tela cheia.
-5. [AFK] E2E: com dispositivo falso, vídeo reproduz e volume/mudo alteram o ganho.
-6. [AFK] Criar `ARCHITECTURE.md`.
-7. [HITL] Teste real com a UGREEN CM630: modo obtido, latência percebida, sincronia de áudio.
+1. [x] [AFK] `captureMode.ts` (1080p60 + fallback) com testes unitários.
+2. [x] [AFK] `sourceRules.ts` (pareamento testado) + `source.ts` (streams com áudio bruto).
+3. [x] [AFK] `audio.ts` + `volume.ts`: `<video>` mudo, áudio via `GainNode`; slider e mudo;
+   "Clique para ativar o som" quando necessário.
+4. [x] [AFK] Botão de tela cheia.
+5. [x] [AFK] Seletores de vídeo e áudio (sem persistência) — antecipado da Fase 2 para a
+   jornada funcionar com webcam + placa conectadas.
+6. [x] [AFK] E2E: com dispositivo falso, vídeo reproduz e volume/mudo alteram o ganho.
+7. [x] [AFK] Criar `ARCHITECTURE.md`.
+8. [ ] [HITL] Teste real com a UGREEN CM630: modo obtido, latência percebida, sincronia de áudio.
 
 **Dependência:** Fase 0
 **Gate de arquitetura:** [ ]
@@ -67,7 +69,7 @@
 
 **Tarefas:**
 1. [AFK] `prefs.ts` (localStorage tolerante a falha) para fonte, volume, mudo.
-2. [AFK] Seletores de vídeo e áudio independentes.
+2. [x] [AFK] Seletores de vídeo e áudio independentes (feito na Fase 1).
 3. [AFK] Estado "Placa não encontrada" + reconexão via `devicechange`; nunca cair para outra câmera.
 4. [AFK] E2E: persistência após reload; aviso quando `deviceId` salvo não existe.
 5. [HITL] Teste real: desplugar e replugar a CM630.

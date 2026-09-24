@@ -34,7 +34,8 @@ e `autoGainControl` **desligados**. Esses filtros são pensados para voz e degra
 
 - Faixa **0–200%**; 100% = áudio original da placa (ganho 1.0). Acima de 100% é amplificação
   e pode distorcer.
-- **Mudo** é independente do nível: desmutar retorna ao nível anterior.
+- **Mudo** é independente do nível: desmutar retorna ao nível anterior. Mudar o nível
+  (slider ou atalho) tira do mudo, como em players de vídeo comuns.
 - Nível e mudo são **persistidos** entre sessões.
 
 ## Atalhos de teclado
