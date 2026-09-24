@@ -20,7 +20,12 @@ export default defineConfig({
         channel: process.env.PW_CHANNEL || undefined,
         // Câmera e microfone simulados: a jornada roda sem a placa real, inclusive na CI.
         launchOptions: {
-          args: ['--use-fake-device-for-media-stream', '--use-fake-ui-for-media-stream'],
+          args: [
+            '--use-fake-device-for-media-stream',
+            '--use-fake-ui-for-media-stream',
+            // Força o caminho real do usuário: áudio só após um gesto.
+            '--autoplay-policy=user-gesture-required',
+          ],
         },
         permissions: ['camera', 'microphone'],
       },
