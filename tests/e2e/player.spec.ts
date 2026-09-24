@@ -11,6 +11,7 @@ async function videoIsPlaying(page: Page): Promise<boolean> {
 /** O dispositivo falso não compartilha nome com o microfone falso; escolhe o áudio manualmente. */
 async function ensureAudioSelected(page: Page): Promise<void> {
   const select = page.locator('#audio-device');
+  if (!(await select.isVisible())) await page.getByRole('button', { name: 'Fonte' }).click();
   if ((await select.inputValue()) === '') {
     const firstReal = await select.locator('option:not([value=""])').first().getAttribute('value');
     await select.selectOption(firstReal!);
@@ -77,8 +78,26 @@ test('botão de tela cheia entra e sai', async ({ page }) => {
   const button = page.locator('#fullscreen');
   await button.click();
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(true);
-  await expect(button).toHaveText('Sair da tela cheia');
+  await expect(button).toHaveAccessibleName('Sair da tela cheia');
   await button.click();
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(false);
-  await expect(button).toHaveText('Tela cheia');
+  await expect(button).toHaveAccessibleName('Tela cheia');
+});
+
+test('painel da fonte mostra dispositivos e o sinal recebido', async ({ page }) => {
+  const panel = page.locator('#source-panel');
+  await expect(panel).toBeHidden();
+  await page.getByRole('button', { name: 'Fonte' }).click();
+  await expect(panel).toBeVisible();
+  await expect(panel.getByRole('combobox', { name: 'Vídeo' })).toBeVisible();
+  await expect(panel.getByRole('combobox', { name: 'Áudio' })).toBeVisible();
+  await expect(panel).toContainText(/Sinal \d+×\d+/);
+  await page.keyboard.press('Escape');
+  await expect(panel).toBeHidden();
+});
+
+test('volume preenche a trilha proporcionalmente', async ({ page }) => {
+  const slider = page.getByRole('slider', { name: 'Volume' });
+  await slider.fill('150');
+  await expect(slider).toHaveCSS('--fill', '75%');
 });

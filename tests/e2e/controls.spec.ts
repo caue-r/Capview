@@ -69,7 +69,15 @@ test('F alterna a tela cheia', async ({ page }) => {
   await expect.poll(() => page.evaluate(() => !!document.fullscreenElement)).toBe(false);
 });
 
+test('controles não somem com o painel da fonte aberto', async ({ page }) => {
+  await page.getByRole('button', { name: 'Fonte' }).click();
+  await page.mouse.move(5, 5);
+  await page.waitForTimeout(3500);
+  await expect(page.locator('#app')).not.toHaveAttribute('data-idle');
+});
+
 test('atalhos não disparam com um seletor em foco', async ({ page }) => {
+  await page.getByRole('button', { name: 'Fonte' }).click();
   await page.locator('#audio-device').focus();
   await page.keyboard.press('m');
   await expect(page.locator('#mute')).toHaveAttribute('aria-pressed', 'false');
