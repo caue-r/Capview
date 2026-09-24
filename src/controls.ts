@@ -45,8 +45,9 @@ export class Controls {
     this.level.value = String(volume.level);
     this.levelValue.value = `${volume.level}%`;
     this.levelValue.dataset.gain = String(gain);
+    // Trilha preenchida até o nível (0–200% → 0–100% da largura).
+    this.level.style.setProperty('--fill', `${volume.level / 2}%`);
     this.mute.setAttribute('aria-pressed', String(volume.muted));
-    this.mute.textContent = volume.muted ? '🔇' : '🔊';
   }
 
   /** Estado do áudio em data-audio (off | suspended | running), para diagnóstico e E2E. */
@@ -64,7 +65,8 @@ export class Controls {
   }
 
   renderFullscreen(active: boolean): void {
-    this.fullscreen.textContent = active ? 'Sair da tela cheia' : 'Tela cheia';
+    this.fullscreen.toggleAttribute('data-active', active);
+    this.fullscreen.setAttribute('aria-label', active ? 'Sair da tela cheia' : 'Tela cheia');
   }
 }
 

@@ -12,7 +12,8 @@ import { createToast } from './toast';
 import { DEFAULT_VOLUME, type Volume, gainOf, setLevel, stepVolume, toggleMute } from './volume';
 
 const screen = document.getElementById('screen') as HTMLVideoElement;
-const status = document.getElementById('status') as HTMLParagraphElement;
+const status = document.getElementById('status') as HTMLElement;
+const statusText = document.getElementById('status-text') as HTMLParagraphElement;
 const unlock = document.getElementById('unlock') as HTMLButtonElement;
 const showToast = createToast(document.getElementById('toast') as HTMLElement);
 
@@ -35,9 +36,11 @@ const controls = new Controls({
   onToggleFullscreen: () => void toggleFullscreen(),
 });
 
-function showStatus(message: string | null): void {
-  status.textContent = message ?? '';
+/** `busy` anima a marca enquanto algo está em andamento (conectando). */
+function showStatus(message: string | null, busy = false): void {
+  statusText.textContent = message ?? '';
   status.hidden = message === null;
+  status.toggleAttribute('data-busy', busy);
 }
 
 function applyVolume(next: Volume): void {
@@ -56,7 +59,7 @@ async function selectVideo(id: string): Promise<void> {
   videoId = id;
   stopStream(videoStream);
   videoStream = null;
-  showStatus('Conectando à placa…');
+  showStatus('Conectando à placa…', true);
   try {
     const stream = await openVideo(id);
     if (request !== videoRequest) return stopStream(stream);
@@ -118,7 +121,7 @@ async function toggleFullscreen(): Promise<void> {
 }
 
 async function start(): Promise<void> {
-  showStatus('Conectando à placa…');
+  showStatus('Conectando à placa…', true);
   try {
     devices = await listDevices();
   } catch (err) {

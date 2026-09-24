@@ -1,5 +1,5 @@
 // "Controles" auto-ocultáveis (CONTEXT.md): somem (com o cursor) após um tempo sem mover o
-// mouse; não somem com o ponteiro sobre a barra nem com um seletor em foco.
+// mouse; não somem com o ponteiro sobre a barra, com um seletor em foco ou com um painel aberto.
 
 export const IDLE_MS = 2500;
 
@@ -7,7 +7,9 @@ export function autoHide(app: HTMLElement, bar: HTMLElement): void {
   let timer: number | undefined;
 
   const mustStayVisible = () =>
-    bar.matches(':hover') || (document.activeElement instanceof HTMLSelectElement && bar.contains(document.activeElement));
+    bar.matches(':hover') ||
+    bar.querySelector(':popover-open') !== null ||
+    (document.activeElement instanceof HTMLSelectElement && bar.contains(document.activeElement));
 
   const scheduleHide = () => {
     window.clearTimeout(timer);
