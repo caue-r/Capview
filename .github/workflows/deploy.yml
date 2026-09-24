@@ -26,6 +26,8 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npx playwright install --with-deps chromium firefox
+      # Runner não tem placa de som; sem um servidor de áudio o Firefox não inicia o AudioContext.
+      - run: sudo apt-get install -y pulseaudio && pulseaudio -D --exit-idle-time=-1
       - run: npm run test:e2e
         env:
           CI: true
