@@ -28,8 +28,15 @@ export class Controls {
   constructor(handlers: ControlsHandlers) {
     this.level.addEventListener('input', () => handlers.onLevel(Number(this.level.value)));
     this.mute.addEventListener('click', () => handlers.onToggleMute());
-    this.videoSelect.addEventListener('change', () => handlers.onVideoDevice(this.videoSelect.value));
-    this.audioSelect.addEventListener('change', () => handlers.onAudioDevice(this.audioSelect.value));
+    // blur após escolher: seletor em foco captura os atalhos e segura a barra visível.
+    this.videoSelect.addEventListener('change', () => {
+      this.videoSelect.blur();
+      handlers.onVideoDevice(this.videoSelect.value);
+    });
+    this.audioSelect.addEventListener('change', () => {
+      this.audioSelect.blur();
+      handlers.onAudioDevice(this.audioSelect.value);
+    });
     this.fullscreen.addEventListener('click', () => handlers.onToggleFullscreen());
   }
 

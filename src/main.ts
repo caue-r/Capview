@@ -1,14 +1,18 @@
 // Composição da página: liga fonte, áudio e controles.
 import { AudioOutput } from './audio';
+import { autoHide } from './autoHide';
 import { describeMode } from './captureMode';
 import { Controls } from './controls';
+import { shortcutFor } from './shortcuts';
 import { type Devices, describeMediaError, listDevices, openAudio, openVideo, stopStream } from './source';
 import { pairAudio } from './sourceRules';
-import { DEFAULT_VOLUME, type Volume, gainOf, setLevel, toggleMute } from './volume';
+import { createToast } from './toast';
+import { DEFAULT_VOLUME, type Volume, gainOf, setLevel, stepVolume, toggleMute } from './volume';
 
 const screen = document.getElementById('screen') as HTMLVideoElement;
 const status = document.getElementById('status') as HTMLParagraphElement;
 const unlock = document.getElementById('unlock') as HTMLButtonElement;
+const showToast = createToast(document.getElementById('toast') as HTMLElement);
 
 const audio = new AudioOutput();
 let volume: Volume = DEFAULT_VOLUME;
@@ -83,6 +87,29 @@ async function selectAudio(id: string): Promise<void> {
   }
 }
 
+function onShortcut(event: KeyboardEvent): void {
+  // Com um seletor em foco, as teclas navegam nas opções dele.
+  if (event.target instanceof HTMLSelectElement) return;
+  const action = shortcutFor(event);
+  if (!action) return;
+  // Evita que as setas também movam o slider em foco ou rolem a página.
+  event.preventDefault();
+  switch (action) {
+    case 'volumeUp':
+    case 'volumeDown':
+      applyVolume(stepVolume(volume, action === 'volumeUp' ? 1 : -1));
+      showToast(`Volume ${volume.level}%`);
+      break;
+    case 'toggleMute':
+      applyVolume(toggleMute(volume));
+      showToast(volume.muted ? 'Mudo' : 'Som ativado');
+      break;
+    case 'toggleFullscreen':
+      void toggleFullscreen();
+      break;
+  }
+}
+
 async function toggleFullscreen(): Promise<void> {
   if (document.fullscreenElement) await document.exitFullscreen();
   else await document.documentElement.requestFullscreen();
@@ -113,6 +140,8 @@ const resumeAudio = () => {
 };
 document.addEventListener('pointerdown', resumeAudio);
 document.addEventListener('keydown', resumeAudio);
+document.addEventListener('keydown', onShortcut);
+autoHide(document.getElementById('app') as HTMLElement, document.getElementById('controls') as HTMLElement);
 audio.onStateChange(renderAudio);
 document.addEventListener('fullscreenchange', () => controls.renderFullscreen(!!document.fullscreenElement));
 
